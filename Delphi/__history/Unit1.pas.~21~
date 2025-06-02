@@ -1,0 +1,183 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, CPort,
+
+  System.Generics.Collections,
+  UBinaryPacketizer;
+
+const
+  BufferSize = 2048;
+
+type
+  TForm1 = class(TForm)
+    Panel1: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    ComPort1: TComPort;
+    ButtonConnect: TButton;
+    edtCOMPort: TEdit;
+    Memo1: TMemo;
+    TmrGetMessage: TTimer;
+    procedure ButtonConnectClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ComPort1RxChar(Sender: TObject; Count: Integer);
+    procedure TmrGetMessageTimer(Sender: TObject);
+  private
+    { Private declarations }
+
+    Packetizer: TBinaryPacketizer;
+    MessageQueue: TQueue<TBytes>;
+    ReceivedBuffer: TBytes;
+
+    isComPortConnected: Boolean;
+
+    procedure OnPacketReceivedHandler(Packet: TBytes);
+
+    procedure ToggleComConnection;
+    function OpenComPort(APort: string): Boolean;
+    function CloseComPort: Boolean;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+function ConvertRange(Value, MinSource, MaxSource, MinDest,
+  MaxDest: Integer): Integer;
+begin
+  if MaxSource = MinSource then
+    raise Exception.Create
+      ('Invalid input range: FromHigh and FromLow cannot be equal.');
+
+  Result := ((Value - MinSource) * (MaxDest - MinDest))
+    div (MaxSource - MinSource) + MinDest;
+end;
+
+function MapRange(Value, FromLow, FromHigh, ToLow, ToHigh: Double): Double;
+begin
+  if FromHigh = FromLow then
+    raise Exception.Create
+      ('Invalid input range: FromHigh and FromLow cannot be equal.');
+
+  Result := ((Value - FromLow) / (FromHigh - FromLow)) *
+    (ToHigh - ToLow) + ToLow;
+end;
+
+procedure TForm1.ButtonConnectClick(Sender: TObject);
+begin
+  ToggleComConnection;
+end;
+
+procedure TForm1.TmrGetMessageTimer(Sender: TObject);
+var
+  Packet: TBytes;
+
+  AData: string;
+  Data: string;
+  Values: TArray<string>;
+begin
+  if MessageQueue.Count > 0 then
+  begin
+    Packet := MessageQueue.Dequeue;
+    AData:= TEncoding.ANSI.GetString(Packet);
+    Memo1.Lines.Add(AData);
+
+    Data := Copy(AData, 1, Length(AData) - 1);
+    Values := Data.Split([';']);
+    if Values[0]='t' then
+    begin
+      Edit1.Text := Values[1];
+      Edit2.Text := Values[2];
+    end
+  end;
+end;
+
+procedure TForm1.ToggleComConnection;
+begin
+  if not isComPortConnected then
+    OpenComPort(edtCOMPort.Text)
+  else
+    CloseComPort;
+end;
+
+procedure TForm1.OnPacketReceivedHandler(Packet: TBytes);
+begin
+  MessageQueue.Enqueue(Packet);
+end;
+
+function TForm1.OpenComPort(APort: string): Boolean;
+begin
+  if not isComPortConnected then
+    try
+      ComPort1.Port := APort;
+      ComPort1.Open;
+
+      isComPortConnected := True;
+      ButtonConnect.Caption := 'Close';
+      memo1.Lines.Add('Serial connected');
+    except
+      on E: Exception do
+        memo1.Lines.Add(E.Message)
+    end;
+end;
+
+function TForm1.CloseComPort: Boolean;
+begin
+  if isComPortConnected then
+    try
+      isComPortConnected := False;
+      ButtonConnect.Caption := 'Open';
+      memo1.Lines.Add('Serial disconnected');
+
+      ComPort1.Close;
+    except
+      on E: Exception do
+        memo1.Lines.Add(E.Message)
+    end;
+end;
+
+procedure TForm1.ComPort1RxChar(Sender: TObject; Count: Integer);
+begin
+  ComPort1.Read(ReceivedBuffer[0], Count);
+  Packetizer.DataReceived(ReceivedBuffer, Count);
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  Packetizer := TBinaryPacketizer.Create(2048);
+  Packetizer.OnPacketReceived := OnPacketReceivedHandler;
+  MessageQueue := TQueue<TBytes>.Create;
+  SetLength(ReceivedBuffer, BufferSize);
+
+  TmrGetMessage.Interval := 30;
+  TmrGetMessage.Enabled := True;
+
+  edtCOMPort.Text := 'COM3';
+  ComPort1.Port := edtCOMPort.Text;
+  ComPort1.BaudRate := br115200;
+  ComPort1.DataBits := dbEight;
+  ComPort1.StopBits := sbOneStopBit;
+  ComPort1.Parity.Bits := prNone;
+  ComPort1.FlowControl.FlowControl := fcNone;
+end;
+
+procedure TForm1.FormDestroy(Sender: TObject);
+begin
+  ReceivedBuffer := nil;
+  FreeAndNil(MessageQueue);
+  FreeAndNil(Packetizer);
+end;
+
+end.

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899/12/30 00.00.00.000.817,=C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00.00.00.000.058,=C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00.00.00.000.732,=C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00.00.00.000.992,=C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00.00.00.000.611,=C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00.00.00.000.130,=C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2025/05/20 09.00.00.000.206,C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\[ ANWAR ]\IPMS\THROTLE\test comport\DelphiComport\Unit1.pas</Transaction>
+    <Transaction>2025/05/20 09.00.00.000.025,=C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2025/05/20 09.00.00.000.628,C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\[ ANWAR ]\IPMS\THROTLE\test comport\DelphiComport\Project1.dproj</Transaction>
+    <Transaction>2025/05/20 09.00.00.000.206,C:\Users\Testing 2d 3\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\[ ANWAR ]\IPMS\THROTLE\test comport\DelphiComport\Unit1.dfm</Transaction>
+    <Transaction>2025/05/20 10.00.00.000.785,=D:\[ ANWAR ]\RISET\ARDUINO_TO_PC\Analog\Delphi\UBinaryPacketizer.pas</Transaction>
+    <Transaction>2025/05/20 10.00.00.000.800,D:\[ ANWAR ]\IPMS\THROTLE\test comport\DelphiComport\Unit1.dfm=D:\[ ANWAR ]\RISET\ARDUINO_TO_PC\Analog\Delphi\Unit1.dfm</Transaction>
+    <Transaction>2025/05/20 10.00.00.000.800,D:\[ ANWAR ]\IPMS\THROTLE\test comport\DelphiComport\Unit1.pas=D:\[ ANWAR ]\RISET\ARDUINO_TO_PC\Analog\Delphi\Unit1.pas</Transaction>
+    <Transaction>2025/05/20 10.00.00.000.044,D:\[ ANWAR ]\IPMS\THROTLE\test comport\DelphiComport\Project1.dproj=D:\[ ANWAR ]\RISET\ARDUINO_TO_PC\Analog\Delphi\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
