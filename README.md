@@ -4,10 +4,6 @@ This project is a simulation interface that connects a physical **Throttle Contr
 
 ---
 
-## 📦 Project Structure
-
----
-
 ## ⚙️ Components Used
 
 ### 🔌 Hardware:
